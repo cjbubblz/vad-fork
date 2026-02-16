@@ -50,14 +50,19 @@ dev_dependencies:
 dependency_overrides:
   record:
     git:
-      url: https://github.com/keyur2maru/record.git
+      url: https://github.com/cjbubblz/record-fork.git
       ref: master
       path: record
   record_macos:
     git:
-      url: https://github.com/keyur2maru/record.git
+      url: https://github.com/cjbubblz/record-fork.git
       ref: master
       path: record_macos
+  record_ios:
+    git:
+      url: https://github.com/cjbubblz/record-fork.git
+      ref: master
+      path: record_ios
 
 topics:
   - vad
