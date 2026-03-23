@@ -25,6 +25,7 @@ class VadHandler {
 
   bool _isDebug = false;
   bool _isInitialized = false;
+  bool _isDisposed = false;
   bool _submitUserSpeechOnPause = false;
   bool _isPaused = false;
 
@@ -261,6 +262,12 @@ class VadHandler {
       print('VadHandler: Checking audio permissions');
     }
 
+    if (_isDisposed) {
+      _onErrorController.add('VadHandler: Cannot start listening — already disposed.');
+      print('VadHandler: Cannot start listening — already disposed.');
+      return;
+    }
+
     bool hasPermission = await _audioRecorder.hasPermission();
     if (!hasPermission) {
       _onErrorController.add('VadHandler: No permission to record audio.');
@@ -338,7 +345,6 @@ class VadHandler {
 
       if (_isDebug) print('VadHandler: Stopping audio recorder');
       await _audioRecorder.stop();
-      await _audioRecorder.dispose();
 
       if (_isDebug) print('VadHandler: Resetting VAD iterator');
       _vadIterator?.reset();
@@ -369,6 +375,8 @@ class VadHandler {
 
   /// Release all resources and close streams
   Future<void> dispose() async {
+    if (_isDisposed) return;
+    _isDisposed = true;
     if (_isDebug) print('VadHandler: dispose called');
 
     if (_isDebug) print('VadHandler: stopping listening');
